@@ -11,13 +11,11 @@ class User:
         return "<User {}>".format(self.email)
 
     def save_to_db(self):
-        connection = psycopg2.connect(user='postgres', password='postgres', database='learning', host='localhost')
+        with psycopg2.connect(user='postgres', password='postgres', database='learning', host='localhost') as connection:
         #cursor create queries and work with results
-        with connection.cursor() as cursor:
-            #"with" will automatically close cursor after finish
-            cursor.execute('INSERT INTO users (email, first_name, last_name) VALUES (%s, %s, %s)',
-                            (self.email, self.first_name, self.last_name))
-        connection.commit()
-        connection.close()
+            with connection.cursor() as cursor:
+                #"with" will automatically close cursor after finish
+                cursor.execute('INSERT INTO users (email, first_name, last_name) VALUES (%s, %s, %s)',
+                                (self.email, self.first_name, self.last_name))
             
 
